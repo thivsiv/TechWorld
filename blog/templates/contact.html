@@ -1,0 +1,75 @@
+{% extends 'base.html' %}  <!-- Inherit the base template (base.html) for structure and layout -->
+{% block content %}  <!-- Define the content block for this specific page -->
+
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100">  <!-- Full-page container that centers content both vertically and horizontally -->
+    <div class="d-flex gap-3 flex-column">  <!-- Flexbox container with a column layout and a gap between items -->
+
+        <h3>Contact Form</h3>  <!-- Title of the page or section -->
+
+        {% for field in form %}  <!-- Loop through each field in the form to display it -->
+            {% if field.errors %}  <!-- Check if there are any errors for the current field -->
+                <div class="col-12">  <!-- Full-width column to display the error message -->
+                    <span class="fw-bold">{{ field.label_tag }}</span>  <!-- Display the label of the field in bold -->
+                    {% for error in field.errors %}  <!-- Loop through all errors for the current field -->
+                        <span class="text-danger">{{ error }}</span>  <!-- Display each error message in red -->
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% if success_message %}  <!-- Check if there is a success message after form submission -->
+            <div class="alert alert-success" role="alert">  <!-- Display success alert -->
+                {{ success_message }}  <!-- Show the success message passed from the view -->
+            </div>
+        {% endif %}
+
+        <form method="post" class="row g-3">  <!-- Form tag with POST method and grid layout for the fields -->
+            {% csrf_token %}  <!-- Django CSRF token to prevent cross-site request forgery -->
+            <div class="col-md-6">  <!-- Half-width column for Name input field -->
+                <label for="name" class="form-label">Name</label>  <!-- Label for Name field -->
+                <input type="text" class="form-control" id="name" value="{{ name }}" name="name" required>  <!-- Input field for Name, populated with value if available -->
+            </div>
+            <div class="col-md-6">  <!-- Half-width column for Email input field -->
+                <label for="email" class="form-label">Email</label>  <!-- Label for Email field -->
+                <input type="email" class="form-control" id="email" value="{{ email }}" name="email" required>  <!-- Input field for Email, populated with value if available -->
+            </div>
+            <div class="col-12">  <!-- Full-width column for Message textarea -->
+                <label for="message" class="form-label">Message</label>  <!-- Label for Message field -->
+                <textarea class="form-control" id="message" name="message" rows="4" required>{{ message }}</textarea>  <!-- Textarea field for Message, populated with value if available -->
+            </div>
+            <div class="col-12">  <!-- Full-width column for the Submit button -->
+                <button type="submit" class="btn custom-btn">Submit</button>  <!-- Submit button with custom styles -->
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}  <!-- End of content block -->
+
+{% block extra_css %}  <!-- Block for extra custom CSS specific to this page -->
+<style>
+    body {
+        background-color: #f5f6f9;  <!-- Light background color for the body -->
+    }
+
+    .custom-btn {
+        background-color: #001147;  <!-- Dark blue background for the submit button -->
+        color: white !important;  <!-- White text color for the submit button -->
+        border: none;  <!-- No border for the button -->
+        padding: 10px 20px;  <!-- Padding around the button text -->
+        font-size: 16px;  <!-- Font size for the button text -->
+        border-radius: 5px;  <!-- Rounded corners for the button -->
+        cursor: pointer;  <!-- Change cursor to pointer on hover -->
+        transition: background-color 0.3s ease;  <!-- Smooth transition effect on hover -->
+    }
+    button.btn.custom-btn{
+        color: White !important
+    }
+    
+    .custom-btn:hover {
+        background-color: #000c3d;  <!-- Darker blue background on hover -->
+        color: white;  <!-- Ensure the text remains white on hover -->
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}  <!-- Extends the base HTML layout -->
+{% load static %}  <!-- Loads static files (e.g., CSS, JS) -->
+
+{% block content %}  <!-- Block for the content section -->
+
+<div class="container-fluid" style="background-color: #f5f6f9;">  <!-- Fluid container with a light background -->
+
+    <!-- Section Title -->
+    <div class="row">
+        <h2 class="text-center my-5">{{ blog_title | upper }}</h2>  <!-- Title for the blog section, converting to uppercase -->
+    </div>
+
+    <!-- Category Filter -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 px-1">
+            <form method="get" class="d-flex flex-wrap justify-content-center align-items-center">
+                <label for="category" class="me-2 mb-2">Filter by Category:</label>  <!-- Label for category filter -->
+                <select name="category" id="category" class="form-select w-auto mb-2 me-2" onchange="this.form.submit()">  <!-- Dropdown for categories -->
+                    <option value="" {% if not selected_category %}selected{% endif %}>All Categories</option>  <!-- Default option for all categories -->
+                    {% for category in categories %}  <!-- Loop over available categories -->
+                    <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>  <!-- Option for each category, with selected check -->
+                        {{ category.name }}  <!-- Display category name -->
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="row justify-content-center m-3">
+        {% if page_obj %}  <!-- Check if there are posts to display -->
+            {% for post in page_obj %}  <!-- Loop through posts in the current page -->
+            <div class="col-md-4 mb-5">  <!-- Create a responsive column for each post -->
+                <div class="card custom-card">  <!-- Card container for each post -->
+                    <div class="card-body">  <!-- Card body containing the content -->
+
+                        <!-- Post Category -->
+                        <div class="col-12 mb-4">
+                            <a class="text-decoration-none text-dark fw-bold" href="#">{{ post.category.name }}</a>  <!-- Link to post category -->
+                        </div>
+
+                        <!-- Post Content Preview -->
+                        <div class="col-12 mb-4">
+                            <p>{{ post.content | truncatewords:30|safe }}</p>  <!-- Truncated preview of the post content -->
+                        </div>
+
+                        <!-- Post Image -->
+                        <div class="col-12 d-flex justify-content-center mb-4">
+                            <img src="{{ post.img_url }}" class="img-fluid custom-img" alt="Post Image">  <!-- Post image -->
+                        </div>
+                        
+                        <!-- Post Title and Read More Link -->
+                        <div class="col-12">
+                            <h5 class="card-title">{{ post.title }}</h5>  <!-- Display post title -->
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'blog:detail' slug=post.slug %}" class="text-primary">Read More</a>  <!-- Read more link that directs to post details -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            <div class="col-12 my-3 py-4 text-center">
+                {% if page_obj.has_other_pages %}  <!-- Check if there are more pages -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">  <!-- Pagination navigation -->
+                        {% if page_obj.has_previous %}  <!-- Check if there is a previous page -->
+                        <li class="page-item">
+                            <a class="page-link text-primary" href="?page=1{% if selected_category %}&category={{ selected_category }}{% endif %}" aria-label="First">
+                                <span aria-hidden="true">&laquo; First</span>  <!-- Link to the first page -->
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}" aria-label="Previous">
+                                <span aria-hidden="true">Previous</span>  <!-- Link to the previous page -->
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="page-item">
+                            <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>  <!-- Display current page number and total pages -->
+                        </li>
+                        
+                        {% if page_obj.has_next %}  <!-- Check if there is a next page -->
+                        <li class="page-item">
+                            <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}" aria-label="Next">
+                                <span aria-hidden="true">Next</span>  <!-- Link to the next page -->
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link text-primary" href="?page={{ page_obj.paginator.num_pages }}{% if selected_category %}&category={{ selected_category }}{% endif %}" aria-label="Last">
+                                <span aria-hidden="true">Last &raquo;</span>  <!-- Link to the last page -->
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        {% else %}
+        <p>No Posts Available</p>  <!-- Message if no posts are available -->
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

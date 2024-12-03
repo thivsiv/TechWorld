@@ -1,0 +1,100 @@
+{% extends 'base.html' %}  <!-- Inherit from the base template (base.html) to maintain layout consistency -->
+
+{% block extra_css %}  <!-- Start of the block for extra custom CSS specific to this page -->
+<style>
+    body {
+        background-color: #f5f6f9; /* Light background color for the body */
+        font-family: Arial, sans-serif;  <!-- Set font family for the page -->
+        margin: 0;  <!-- Remove default margin from the body -->
+        padding: 0;  <!-- Remove default padding from the body -->
+    }
+
+    .row {
+        margin: 0 auto;  <!-- Center the row horizontally -->
+        padding: 20px;  <!-- Add padding around the row -->
+        max-width: 1200px; /* Set maximum width of the content area */
+    }
+
+    .card {
+        border: none;  <!-- Remove border from the card -->
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow effect to the card */
+        border-radius: 5px;  <!-- Round the corners of the card -->
+    }
+
+    .card-title {
+        font-weight: bold;  <!-- Make the card title bold -->
+    }
+
+    ul.list-unstyled li {
+        margin-bottom: 10px;  <!-- Add space between list items -->
+    }
+
+    ul.list-unstyled a {
+        text-decoration: none;  <!-- Remove underline from links -->
+        color: #007bff;  <!-- Set link color to blue -->
+    }
+
+    ul.list-unstyled a:hover {
+        text-decoration: underline;  <!-- Underline the link when hovered -->
+    }
+
+    .img-fluid {
+        border-radius: 5px;  <!-- Round the corners of images -->
+    }
+
+    h1 small {
+        font-size: 18px;  <!-- Set smaller font size for the small text under the title -->
+        color: #6c757d;  <!-- Set text color for the small text (grayish) -->
+        margin-left: 5px;  <!-- Add space between the title and the small text -->
+    }
+
+    /* Additional styling for mobile responsiveness */
+    @media (max-width: 768px) {  <!-- Apply these styles on screens with max width of 768px (mobile view) -->
+        .col-lg-8, .col-lg-4 {
+            width: 100%; /* Stack columns on small screens */
+            margin-bottom: 20px;  <!-- Add margin to the bottom of columns for spacing -->
+        }
+    }
+</style>
+{% endblock %}  <!-- End of extra CSS block -->
+
+{% block content %}  <!-- Define the content block for this page -->
+<div class="row">  <!-- Start of a Bootstrap grid row -->
+    <!-- Main Blog Content -->
+    <div class="col-lg-8">  <!-- Main content section (8 columns in large screen) -->
+        <h1 class="mb-4">  <!-- Blog post title with margin-bottom of 4 -->
+            {{ post.title }}  <!-- Display the post title dynamically -->
+            <small>({{ post.category.name }})</small>  <!-- Display the category name in small text -->
+        </h1>
+        <p class="text-muted">  <!-- Paragraph to show the post's creation date with muted text style -->
+            Posted on {{ post.created_at|date:"F j, Y" }}  <!-- Format the creation date as 'Month day, Year' -->
+        </p>
+        {% if post.img_url %}  <!-- Check if the post has an image URL -->
+        <img src="{{ post.img_url }}" class="img-fluid mb-4" alt="Blog Image">  <!-- Display the post image if it exists -->
+        {% endif %}
+
+        <!-- Render the post content safely -->
+        <div class="post-content">
+            {{ post.content|safe }}  <!-- Render the post content with HTML tags intact using the safe filter -->
+        </div>
+    </div>
+
+    <!-- Sidebar: Related Posts -->
+    <div class="col-lg-4">  <!-- Sidebar section (4 columns in large screen) -->
+        <div class="card mt-3">  <!-- Card component with margin-top of 3 -->
+            <div class="card-body">  <!-- Card body -->
+                <h5 class="card-title">Related Posts</h5>  <!-- Title for related posts section -->
+                <ul class="list-unstyled">  <!-- Unordered list with no bullet points -->
+                    {% for related_post in related_posts %}  <!-- Loop through each related post -->
+                    <li>  <!-- List item for each related post -->
+                        <a href="{% url 'blog:detail' slug=related_post.slug %}">  <!-- Link to the related post detail page -->
+                            {{ related_post.title }}  <!-- Display the title of the related post -->
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}  <!-- End of content block -->

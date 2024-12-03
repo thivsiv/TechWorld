@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid" style="background-color: #f5f6f9;">
+    <!-- About Us Heading Section -->
+    <div class="d-flex flex-column align-items-center py-4">
+        <h2 class="text-center">About Us</h2>
+    </div>
+
+    <!-- Flex Section: How It Started and Image -->
+    <div class="row align-items-center justify-content-center mt-4 px-3">
+        <!-- Text Content -->
+        <div class="col-md-6 px-3">
+           <h3> Welcome to Tech World Blog</h3><br>
+            <h4>How It Started</h4>
+            <p>Our journey began with a small idea: to share technology insights with the world. What started as a simple blog has grown into a vibrant platform that connects tech enthusiasts everywhere.</p>
+            <h4>Our Dream</h4>
+            <p>We dream of a future where everyone understands and benefits from the transformative power of technology. Together, we can make tech accessible to everyone, one blog at a time.</p>
+        </div>
+
+        <!-- Image Content -->
+        <div class="col-md-6 text-center px-3">
+            <img src="https://images.pexels.com/photos/7652469/pexels-photo-7652469.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Our Journey Image" class="img-fluid rounded">
+        </div>
+    </div>
+
+    <!-- Main About Us Content -->
+    <div class="d-flex flex-column align-items-center pb-5">
+        <div class="content px-3">
+            {{ about_content|safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}
